@@ -18,12 +18,13 @@ export default [
       '@typescript-eslint': tsPlugin,
     },
     rules: {
-      ...jsPlugin.configs.recommended.rules, // Spread JS recommended rules
-      ...tsPlugin.configs.recommended.rules, // Spread TypeScript recommended rules
-      ...prettierConfig.rules, // Spread Prettier rules
+      ...jsPlugin.configs.recommended.rules,
+      ...tsPlugin.configs.recommended.rules,
+      ...prettierConfig.rules,
       'no-unused-vars': 'error',
       'prefer-const': 'error',
       'no-console': 'warn',
+      '@typescript-eslint/no-this-alias': ['error'], // Enforce no aliasing of 'this'
     },
     ignores: ['node_modules/', 'dist/'], // Patterns to ignore
   },
