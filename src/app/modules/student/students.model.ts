@@ -82,7 +82,7 @@ const studentSchema = new Schema<TStudent>({
   id: {
     type: String,
     required: [true, requiredMessage('Student ID')],
-    // unique: true,
+    unique: true,
   },
   user: {
     type: Schema.Types.ObjectId,
@@ -115,7 +115,7 @@ const studentSchema = new Schema<TStudent>({
     required: [true, requiredMessage('Gender')],
   },
   dateOfBirth: {
-    type: Date,
+    type: String,
     required: true,
   },
   email: {
@@ -130,6 +130,11 @@ const studentSchema = new Schema<TStudent>({
   emergencyContactNo: {
     type: String,
     required: [true, requiredMessage('Emergency Contact Number')],
+  },
+
+  admissionSemester: {
+    type: Schema.Types.ObjectId,
+    ref: 'AcademicSemester',
   },
 
   gurdian: {

@@ -1,6 +1,6 @@
 import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
-import { usersRoutes } from './app/modules/users/users.router';
+import { usersRoutes } from './app/modules/user/users.router';
 import globalErrorHandler from './app/middlewares/errorHandler';
 import pageNotFoundHandler from './app/middlewares/pageNotFoundHandler';
 import router from './app/routes/routes';
