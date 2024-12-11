@@ -1,6 +1,8 @@
 import { model, Schema } from 'mongoose';
 import { TGurdian, TlocalGurdian, TStudentName } from './students.interface';
 import { TStudent } from './students.interface';
+import { boolean } from 'zod';
+import { AppError } from '../../errors/appError';
 
 const requiredMessage = (field: string) => `${field} is required`;
 
@@ -131,12 +133,20 @@ const studentSchema = new Schema<TStudent>({
     type: String,
     required: [true, requiredMessage('Emergency Contact Number')],
   },
-
+  academicDepartment: {
+    type: String,
+    ref: 'Academic-Department',
+  },
   admissionSemester: {
     type: Schema.Types.ObjectId,
-    ref: 'AcademicSemester',
+    ref: 'Academic-Semester',
   },
 
+  isDeleted: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
   gurdian: {
     type: gurdianSchema,
     required: [true, requiredMessage('Guardian Information')],
@@ -146,6 +156,15 @@ const studentSchema = new Schema<TStudent>({
     type: localGurdianSchema,
     required: [true, requiredMessage('Local Guardian Information')],
   },
+});
+
+studentSchema.pre('findOneAndUpdate', async function (next) {
+  const isUserExist = await this.findOne(this?.id);
+  console.log(this);
+  if (!isUserExist) {
+    throw new AppError(404, 'User does not exist');
+  }
+  next();
 });
 
 export const StudentModel = model<TStudent>('student', studentSchema);

@@ -1,6 +1,9 @@
 import { Request, Response } from 'express';
 import studentService from './students.service';
 import studentValidationSchema from './students.validation';
+import catchAsync from '../../utils/catchAsync';
+import catchAsync from '../../utils/catchAsync';
+import sendResponse from '../../utils/sendResponse';
 
 const createStudent = async (req: Request, res: Response) => {
   try {
@@ -58,24 +61,18 @@ const getSingleStudent = async (req: Request, res: Response) => {
   }
 };
 
-const deleteSingleStudent = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const numID = parseInt(id);
-    const result = await studentService.deleteSingleStudentFromDB(numID);
-    res.status(200).json({
-      success: true,
-      message: 'Student data deleted successfully',
-      data: result,
-    });
-  } catch (err) {
-    res.json({
-      success: false,
-      err,
-    });
-  }
-};
+const deleteSingleStudent = catchAsync(async (req, res) => {
+  const { studentId } = req.params;
+  const numID = parseInt(studentId);
+  const result = await studentService.deleteSingleStudentFromDB(numID);
 
+  sendResponse(res, {
+    data: result,
+    statusCode: 200,
+    success: true,
+    message: 'Student Deleted successfully',
+  });
+});
 export default {
   createStudent,
   getAllStudents,

@@ -8,11 +8,19 @@ const academicFacultySchema = new Schema<TAcademicFaculty>(
       unique: true,
       required: true,
     },
+    academicFaculty: {
+      type: String,
+      unique: true,
+      required: true,
+    },
   },
   {
     timestamps: true,
   },
 );
+
+
+
 
 const AcademicFacultyModel = model<TAcademicFaculty>(
   'Academic-Faculty',
