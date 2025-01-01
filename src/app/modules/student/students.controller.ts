@@ -43,23 +43,17 @@ const getAllStudents = async (req: Request, res: Response) => {
   }
 };
 
-const getSingleStudent = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const numId = parseInt(id);
-    const result = await studentService.getSingleStudentFromDB(numId);
-    res.status(200).json({
-      success: true,
-      message: 'Student data retrieved successfully',
-      data: result,
-    });
-  } catch (err) {
-    res.json({
-      success: false,
-      err,
-    });
-  }
-};
+const getSingleStudent = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const numId = parseInt(id);
+  const result = await studentService.getSingleStudentFromDB(numId);
+  sendResponse(res, {
+    success: true,
+    message: 'Student data retrieved successfully',
+    data: result,
+    statusCode: 200,
+  });
+});
 
 const deleteSingleStudent = catchAsync(async (req, res) => {
   const { studentId } = req.params;

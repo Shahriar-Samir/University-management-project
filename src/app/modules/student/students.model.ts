@@ -158,12 +158,8 @@ const studentSchema = new Schema<TStudent>({
   },
 });
 
-studentSchema.pre('findOneAndUpdate', async function (next) {
-  const isUserExist = await this.findOne(this?.id);
+studentNameSchema.pre('find', async function (next) {
   console.log(this);
-  if (!isUserExist) {
-    throw new AppError(404, 'User does not exist');
-  }
   next();
 });
 

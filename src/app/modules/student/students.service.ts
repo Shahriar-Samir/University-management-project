@@ -28,7 +28,11 @@ const getAllStudentsFromDB = async () => {
 };
 
 const getSingleStudentFromDB = async (id: number) => {
-  const result = await StudentModel.aggregate([{ $match: { id: id } }]);
+  const result = await StudentModel.findOne({ id });
+  return result;
+};
+const updateStudentIntoDB = async (id: number) => {
+  const result = await StudentModel.findOne({ id });
   return result;
 };
 
@@ -36,12 +40,17 @@ const deleteSingleStudentFromDB = async (id: number) => {
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
+    const isUserExist = await StudentModel.findOne({ id });
+    console.log(isUserExist);
+    if (isUserExist === null) {
+      console.log('dsf');
+      throw new AppError(404, 'User does not exist');
+    }
     const studentDeleted = await StudentModel.findOneAndUpdate(
       { id },
       { isDeleted: true },
       { new: true, session },
     );
-
 
     if (!studentDeleted) {
       throw new AppError(400, 'Failed to delete student');
@@ -63,6 +72,7 @@ const deleteSingleStudentFromDB = async (id: number) => {
   } catch (err) {
     await session.abortTransaction();
     await session.endSession();
+    throw err;
   }
 };
 
